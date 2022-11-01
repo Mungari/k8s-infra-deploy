@@ -19,6 +19,7 @@ if [[ $(sudo virsh net-dhcp-leases default | wc -l) -le 3 ]]; then
 else
     ip_aval=0
 fi
+done
 
 echo "[master]" > $hosts_file
 echo "[worker]" >> $hosts_file

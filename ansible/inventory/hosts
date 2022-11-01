@@ -1,5 +1,5 @@
 [master]
-k8s-master ansible_host=192.168.122.15
+k8s-master ansible_host=192.168.122.197
 [worker]
-k8s-worker-2 ansible_host=192.168.122.31
-k8s-worker-1 ansible_host=192.168.122.171
+k8s-worker-2 ansible_host=192.168.122.164
+k8s-worker-1 ansible_host=192.168.122.210
