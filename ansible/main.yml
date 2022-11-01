@@ -1,0 +1,9 @@
+---
+- name: "Setup kubernetes"
+  import_playbook: common_init.yml
+
+- name: "Init cluster"
+  import_playbook: init_cluster.yml
+
+- name: "Join nodes"
+  import_playbook: join_cluster.yml

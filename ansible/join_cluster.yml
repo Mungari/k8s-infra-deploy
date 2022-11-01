@@ -1,0 +1,6 @@
+---
+- name: "Setup kubernetes cluster"
+  hosts: worker
+  tasks:
+    - name: "Join node {{ inventory_hostname }} "
+      shell: "{{ hostvars['k8s-master']['join_command'].stdout }}"

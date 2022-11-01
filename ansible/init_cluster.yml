@@ -1,0 +1,29 @@
+---
+- name: "Setup kubernetes cluster"
+  hosts: master
+  tasks:
+    - name: "Check if cluster is already running"
+      shell: "netstat -tulnp | grep 6443 | wc -l"
+      register: is_running
+    
+    - name: "Run init command"
+      shell: kubeadm init --pod-network-cidr 10.10.14.0/24
+      become: yes
+      when: is_running.stdout|int == 0
+
+    - name: "Create .kube directory"
+      file:
+        name: /root/.kube
+        state: directory
+      become: yes
+
+    - name: "Copy default kubeconfig to /root/.kube/config"
+      copy:
+        src: "/etc/kubernetes/admin.conf"
+        dest: "/root/.kube/config"
+        remote_src: yes
+      become: yes
+
+    - name: "Save join command"
+      shell: "kubeadm token create --print-join-command"
+      register: join_command

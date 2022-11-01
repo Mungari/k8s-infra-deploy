@@ -1,0 +1,73 @@
+---
+- name: "Setup kubernetes cluster"
+  hosts: all
+  tasks:
+    - name: "Add docker repo"
+      shell: yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+      args:
+        creates: /etc/yum.repos.d/docker-ce.repo
+      become: true
+
+    - name: "Add kubernetes repo"
+      yum_repository:
+        name: "Kubernetes"
+        description: "Kubernetes"
+        baseurl: "https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64"
+      become: true
+
+    - name: "replace sysctl.conf file"
+      copy:
+        src: "items/sysctl.conf"
+        dest: "/etc/sysctl.conf"
+        force: yes
+      become: true
+
+    - name: "Set modprobes"
+      shell: "modprobe {{ item }}"
+      loop:
+        - "bridge"
+        - "br_netfilter"
+      become: true
+
+    - name: "Reload confs"
+      shell: "sysctl -p"
+      become: true
+
+    - name: "Disable selinux"
+      shell: "{{ item }}"
+      loop:
+        - "setenforce 0"
+        - "sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config"
+      become: true
+
+    - name: "Install containerd and kubernetes packages"
+      yum:
+        name: "{{ item }}"
+        state: installed
+        disable_gpg_check: yes
+      loop:
+        - "containerd"
+        - "kubelet"
+        - "kubeadm"
+        - "kubectl"
+
+    - name: "Enable kubernetes and containerd"
+      systemd:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop:
+        - "kubelet"
+        - "containerd"
+      become: yes
+
+    - name: "Remove /etc/containerd/config.toml to init cluster (workaround)"
+      file:
+        name: /etc/containerd/config.toml
+        state: absent
+      become: yes
+
+    - name: "Restart contained service"
+      systemd:
+        name: "containerd"
+        state: restarted

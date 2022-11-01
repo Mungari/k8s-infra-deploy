@@ -1,0 +1,18 @@
+---
+- name: "Copy calico deployment to master node"
+  copy:
+    src: "files/calico-deploy.yml"
+    dest: "/root/calico/calico-deploy.yml"
+
+- name: "Copy calico CRDs to master node"
+  copy:
+    src: "files/calico-crds.yml"
+    dest: "/root/calico/calico-crds.yml"
+
+- name: "Apply files"
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ item }}"
+  loop:
+    - /root/calico/calico-deploy.yml
+    - /root/calico/calico-crds.yml
