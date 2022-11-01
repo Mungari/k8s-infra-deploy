@@ -21,7 +21,7 @@ provider "libvirt" {
 resource "libvirt_volume" "centos"{ 
     name = "centos"
     pool = "default"
-    source = "http://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.4.2105-20210603.0.x86_64.qcow2" # Cloud image
+    source = "https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-GenericCloud-9-20221024.0.x86_64.qcow2" # Cloud image
     #source = "./images/centos-7.qcow2" # Locally saved image
     #format = "qcow2"
 }
