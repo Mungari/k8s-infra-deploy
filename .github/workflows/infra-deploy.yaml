@@ -12,7 +12,7 @@ jobs:
         id: checker
       - name: "Deploy cluster"
         if: ${{ steps.checker.outputs.NODES_RUNNING == 0 }}
-        run: sudo terraform init && sudo terraform apply --auto-approve
+        run: sudo terraform -chdir=terraform init && sudo terraform -chdir=terraform apply --auto-approve
       - name: "Check if cluster is configured"
         if: ${{ steps.checker.outputs.NODES_RUNNING != 0 }}
         id: health
