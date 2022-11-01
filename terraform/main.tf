@@ -19,7 +19,6 @@ provider "libvirt" {
 
 # Create disk that contains image
 resource "libvirt_volume" "centos"{
-    for_each = toset(["k8s-master.qcow2", "k8s-worker-1.qcow2","k8s-worker-2.qcow2"])
     name = "centos"
     pool = "default"
     source = "http://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.4.2105-20210603.0.x86_64.qcow2" # Cloud image
