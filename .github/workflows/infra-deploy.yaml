@@ -17,6 +17,9 @@ jobs:
         if: ${{ steps.checker.outputs.NODES_RUNNING != 0 }}
         id: health
         run: echo BOOTSTRAPPED_NODES=$(ssh -i ../configs/root root@$(sudo virsh domifaddr k8s-master | grep -ohe "192.*" | cut -d"/" -f1) "kubectl get nodes | grep worker | wc -l")>>$GITHUB_OUTPUT
+      - name: "Get cluster IPs"
+        if: ${{ steps.health.outputs.BOOTSTRAPPED_NODES == 0 }}
+        run: ../utils/gather_hosts.sh
       - name: "Configure cluster if it's not configured"
         if: ${{ steps.health.outputs.BOOTSTRAPPED_NODES == 0 }}
         run: ansible-playbook -i ../ansible/inventory/hosts ../ansible/main.yml
