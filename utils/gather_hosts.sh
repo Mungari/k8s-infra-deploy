@@ -2,7 +2,7 @@
 
 # vars
 basedir=$(dirname $0)
-hosts_file="$basedir/../ansible/inventory/hosts"
+hosts_file="ansible/inventory/hosts"
 
 sp="/-\|"
 sc=0
