@@ -12,7 +12,7 @@ jobs:
         id: checker
       - name: "Deploy cluster"
         if: ${{ steps.checker.outputs.NODES_RUNNING == 0 }}
-        run: sudo terraform init && sudo terraform apply --auto-approve
+        run: sudo terraform --chdir=./terraform init && sudo terraform --chdir=./terraform apply --auto-approve
       - name: "Check if cluster is configured"
         if: ${{ steps.checker.outputs.NODES_RUNNING != 0 }}
         id: health
@@ -22,4 +22,4 @@ jobs:
         run: ../utils/gather_hosts.sh
       - name: "Configure cluster if it's not configured"
         if: ${{ steps.health.outputs.BOOTSTRAPPED_NODES == 0 }}
-        run: ansible-playbook -i ../ansible/inventory/hosts ../ansible/main.yml
+        run: ansible-playbook -i ./ansible/inventory/hosts ./ansible/main.yml

@@ -22,8 +22,8 @@ resource "libvirt_volume" "centos"{
     for_each = toset(["k8s-master.qcow2", "k8s-worker-1.qcow2","k8s-worker-2.qcow2"])
     name = each.key
     pool = "default"
-    #source = "https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.4.2105-20210603.0.x86_64.qcow2" # Cloud image
-    source = "./images/centos-7.qcow2" # Locally saved image
+    source = "https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.4.2105-20210603.0.x86_64.qcow2" # Cloud image
+    #source = "./images/centos-7.qcow2" # Locally saved image
     format = "qcow2"
 }
 
