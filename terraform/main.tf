@@ -30,7 +30,7 @@ resource "libvirt_volume" "centos"{
 resource "libvirt_volume" "test" {
   for_each = toset(["k8s-master.qcow2", "k8s-worker-1.qcow2","k8s-worker-2.qcow2"])
   name = each.key
-  base_volume_id = centos.centos.id
+  base_volume_id = libvirt_volume.centos.id
 }
 
 data "template_file" "user_data" {
