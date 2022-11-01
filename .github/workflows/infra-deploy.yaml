@@ -1,6 +1,6 @@
 name: deploy infrastructure
 run-name: big-bang
-on: [push]
+on: [push,workflow_dispatch]
 jobs:
   check_nodes_provisioned:
     runs-on: self-hosted
