@@ -20,11 +20,16 @@ provider "libvirt" {
 # Create disk that contains image
 resource "libvirt_volume" "centos"{
     for_each = toset(["k8s-master.qcow2", "k8s-worker-1.qcow2","k8s-worker-2.qcow2"])
-    name = each.key
+    name = centos
     pool = "default"
-    source = "https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.4.2105-20210603.0.x86_64.qcow2" # Cloud image
+    source = "http://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.4.2105-20210603.0.x86_64.qcow2" # Cloud image
     #source = "./images/centos-7.qcow2" # Locally saved image
-    format = "qcow2"
+    #format = "qcow2"
+}
+
+resource "libvirt_volume" "test" {
+  for_each = toset(["k8s-master.qcow2", "k8s-worker-1.qcow2","k8s-worker-2.qcow2"])
+  base_volume_id = centos.centos.id
 }
 
 data "template_file" "user_data" {
@@ -57,7 +62,7 @@ resource "libvirt_domain" "k8s-nodes"{
         network_name = "default" # List networks with virsh net-list
     }
     disk {
-        volume_id = "${libvirt_volume.centos[each.value.disk].id}"
+        volume_id = "${libvirt_volume.test[each.value.disk].id}"
     }
     cloudinit = "${libvirt_cloudinit_disk.commoninit[each.key].id}"
     console {
