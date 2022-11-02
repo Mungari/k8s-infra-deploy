@@ -28,6 +28,10 @@
       shell: "kubeadm token create --print-join-command"
       register: join_command
 
+    - name: "Install k8s dependency"
+      pip:
+        name: "kubernetes"
+
     - name: "Install CNI"
       import_role:
         name: cni
