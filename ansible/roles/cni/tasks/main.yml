@@ -1,4 +1,9 @@
 ---
+- name: "Create calico directory"
+  file:
+    path: "/root/calico"
+    state: directory
+
 - name: "Copy calico deployment to master node"
   copy:
     src: "files/calico-deploy.yml"
