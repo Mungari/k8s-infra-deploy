@@ -2,7 +2,7 @@
 
 # vars
 basedir=$(dirname $0)
-hosts_file="ansible/inventory/hosts"
+hosts_file="$basedir/../ansible/inventory/hosts"
 
 sp="/-\|"
 sc=0
@@ -15,7 +15,7 @@ ip_aval=1
 echo "Wait for the IPs to become available..."
 while [[ $ip_aval -ne 0 ]]; do
     if [[ $(sudo virsh net-dhcp-leases default | wc -l) -le 3 ]]; then
-      spin
+        spin
     else
         ip_aval=0
     fi
