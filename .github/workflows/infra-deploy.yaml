@@ -30,4 +30,4 @@ jobs:
       
       - name: "Configure cluster if it's not configured"
         if: ${{ steps.health.outputs.BOOTSTRAPPED_NODES == 0 }}
-        run: cd ansible; ansible-playbook -i inventory/hosts main.yml
+        run: cd ansible; ansible-galaxy install -r roles/requirements.yml; ansible-playbook -i inventory/hosts main.yml
