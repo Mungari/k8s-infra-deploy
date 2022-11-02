@@ -2,9 +2,12 @@ name: deploy infrastructure
 run-name: big-bang
 on: [push,workflow_dispatch]
 jobs:
-  check_nodes_provisioned:
+  provision_cluster:
     runs-on: self-hosted
     steps:
+      - name: "install kubernetes dependency on python"
+        run: pip3 install kubernetes
+        
       - name: "Checkout repo"
         uses: actions/checkout@v3
       
