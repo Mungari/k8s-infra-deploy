@@ -21,7 +21,7 @@ provider "libvirt" {
 resource "libvirt_volume" "centos"{ 
     name = "centos"
     pool = "default"
-    source = "https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-GenericCloud-9-20221024.0.x86_64.qcow2" # Cloud image
+    source = "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2" # Cloud image
     #source = "./images/centos-7.qcow2" # Locally saved image
     #format = "qcow2"
 }
@@ -54,12 +54,12 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 
 resource "libvirt_domain" "k8s-nodes"{
     for_each = local.k8s-nodes
-
     name = each.key
     memory = "2048"
     vcpu = "2" # Consider upping to 2
     network_interface {
         network_name = "default" # List networks with virsh net-list
+        hostname = each.key
     }
     disk {
         volume_id = "${libvirt_volume.test[each.value.disk].id}"
