@@ -27,7 +27,7 @@ resource "libvirt_volume" "centos"{
 }
 
 resource "libvirt_volume" "test" {
-  for_each = var.k8s_nodes
+  for_each = var.k8s-nodes
   name = each.value.disk
   base_volume_id = libvirt_volume.centos.id
 }
