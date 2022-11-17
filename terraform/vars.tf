@@ -1,4 +1,4 @@
-variable "k8s_nodes" {
+variable "k8s-nodes" {
     type = map(object({
         name = string
         ip = string
