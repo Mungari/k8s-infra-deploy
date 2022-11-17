@@ -15,7 +15,7 @@ jobs:
         run: chmod 600 terraform/configs/root
 
       - name: "Modify cloudinit to add generate key"
-        run: sed -i "s/CHANGEME/$(cat terraform/configs/root.pub)/" terraform/configs/users_and_groups.cfg 
+        run: hash=$(cat terraform/configs/root.pub); sed -i "s/CHANGEME/${hash}/" terraform/configs/users_and_groups.cfg 
 
       - name: "Check if nodes are deployed"
         run: echo NODES_RUNNING=$(sudo virsh list --all | grep k8s | wc -l)>>$GITHUB_OUTPUT
