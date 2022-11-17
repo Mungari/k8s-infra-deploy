@@ -5,6 +5,9 @@ jobs:
   provision_cluster:
     runs-on: self-hosted
     steps:
+      - name: "Change ownership"
+        run: sudo chown -R $USER:$USER /home/github/actions-runner/_work/{REPOSITORY_NAME_HERE}
+
       - name: "Checkout repo"
         uses: actions/checkout@v3
 
