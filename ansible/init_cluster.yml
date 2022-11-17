@@ -7,7 +7,7 @@
       register: is_running
     
     - name: "Run init command"
-      shell: kubeadm init --pod-network-cidr 10.10.14.0/24
+      shell: kubeadm init --pod-network-cidr=10.10.14.0/24
       become: yes
       when: is_running.stdout|int == 0
 
@@ -31,6 +31,7 @@
     - name: "Install k8s dependency"
       pip:
         name: "kubernetes"
+        executable: pip3
 
     - name: "Install CNI"
       import_role:

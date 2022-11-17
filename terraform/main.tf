@@ -21,14 +21,14 @@ provider "libvirt" {
 resource "libvirt_volume" "centos"{ 
     name = "centos"
     pool = "default"
-    source = "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2" # Cloud image
-    #source = "./images/centos-7.qcow2" # Locally saved image
+    #source = "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2" # Cloud image
+    source = "./images/centos-7.qcow2" # Locally saved image
     #format = "qcow2"
 }
 
 resource "libvirt_volume" "test" {
-  for_each = toset(["k8s-master.qcow2", "k8s-worker-1.qcow2","k8s-worker-2.qcow2"])
-  name = each.key
+  for_each = var.k8s_nodes
+  name = each.value.disk
   base_volume_id = libvirt_volume.centos.id
 }
 
@@ -36,16 +36,8 @@ data "template_file" "user_data" {
   template = "${file("${path.module}/configs/users_and_groups.cfg")}"
 }
 
-locals {
-  k8s-nodes = {
-  "k8s-master" = {disk = "k8s-master.qcow2"},
-  "k8s-worker-1" = {disk = "k8s-worker-1.qcow2"},
-  "k8s-worker-2" = {disk = "k8s-worker-2.qcow2"}
-  }
-}
-
 resource "libvirt_cloudinit_disk" "commoninit" {
-  for_each = local.k8s-nodes
+  for_each = var.k8s-nodes
 
   name = format("%s%s",each.key,"commoninit.iso")
   pool = "default"
@@ -53,13 +45,13 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 }
 
 resource "libvirt_domain" "k8s-nodes"{
-    for_each = local.k8s-nodes
+    for_each = var.k8s-nodes
     name = each.key
     memory = "2048"
     vcpu = "2" # Consider upping to 2
     network_interface {
         network_name = "default" # List networks with virsh net-list
-        hostname = each.key
+        addresses = [each.value.ip]
     }
     disk {
         volume_id = "${libvirt_volume.test[each.value.disk].id}"

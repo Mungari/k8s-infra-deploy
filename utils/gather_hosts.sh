@@ -14,14 +14,13 @@ spin() {
 ip_aval=1
 echo "Wait for the IPs to become available..."
 while [[ $ip_aval -ne 0 ]]; do
-    if [[ $(sudo virsh net-dhcp-leases default | wc -l) -le 3 ]]; then
+    if [[ $(sudo virsh net-dhcp-leases default | wc -l) -lt 6 ]]; then
         spin
     else
         ip_aval=0
     fi
 done
-
-echo "[master]" > $hosts_file
+echo "[master]" >> $hosts_file
 echo "[worker]" >> $hosts_file
 for instance in $(sudo virsh list --all | grep k8s | awk {'print $2'} | sort); do
     host=$(sudo virsh domifaddr $instance | grep -ohe "192.*" | cut -d"/" -f1)

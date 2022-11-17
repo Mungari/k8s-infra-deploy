@@ -21,3 +21,5 @@
   loop:
     - /root/calico/calico-deploy.yml
     - /root/calico/calico-crds.yml
+  vars:
+     ansible_python_interpreter: /usr/bin/python3
