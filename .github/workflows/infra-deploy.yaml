@@ -34,7 +34,7 @@ jobs:
 
       - name: "Restart machines"
         if: ${{ steps.checker.outputs.NODES_RUNNING != 0 }}
-        run: or vm in $(sudo virsh list --all | grep k8s); sudo virsh reboot $vm; done
+        run: for vm in $(sudo virsh list --all | grep k8s); sudo virsh reboot $vm; done
       
       - name: "Get cluster IPs"
         if: ${{ steps.health.outputs.BOOTSTRAPPED_NODES == 0 }}

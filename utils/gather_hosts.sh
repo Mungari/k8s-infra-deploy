@@ -20,7 +20,7 @@ while [[ $ip_aval -ne 0 ]]; do
         ip_aval=0
     fi
 done
-echo "[master]" >> $hosts_file
+echo "[master]" > $hosts_file
 echo "[worker]" >> $hosts_file
 for instance in $(sudo virsh list --all | grep k8s | awk {'print $2'} | sort); do
     host=$(sudo virsh domifaddr $instance | grep -ohe "192.*" | cut -d"/" -f1)
