@@ -22,7 +22,7 @@ resource "libvirt_volume" "centos"{
     name = "centos"
     pool = "default"
     #source = "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2" # Cloud image
-    source = "~/images/centos-7.qcow2" # Locally saved image
+    source = "/home/fmungari/images/centos-7.qcow2" # Locally saved image
     #format = "qcow2"
 }
 
