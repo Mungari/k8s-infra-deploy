@@ -51,6 +51,9 @@ resource "libvirt_domain" "k8s-nodes"{
     vcpu = "2" # Consider upping to 2
     network_interface {
         network_name = "default" # List networks with virsh net-list
+        output "test" {
+          value = each.value.ip
+        }
         addresses = [each.value.ip]
     }
     disk {
