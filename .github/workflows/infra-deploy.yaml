@@ -11,15 +11,6 @@ jobs:
       - name: "Checkout repo"
         uses: actions/checkout@v3
 
-      - name: "Generate key"
-        run: ssh-keygen -f terraform/configs/root
-
-      - name: "Fix permissions for key"
-        run: chmod 600 terraform/configs/root
-
-      - name: "Modify cloudinit to add generate key"
-        run: hash=$(cat terraform/configs/root.pub); sed -i "s|CHANGEME|${hash}|" terraform/configs/users_and_groups.cfg 
-
       - name: "Check if nodes are deployed"
         run: echo NODES_RUNNING=$(sudo virsh list --all | grep k8s | wc -l)>>$GITHUB_OUTPUT
         id: checker
