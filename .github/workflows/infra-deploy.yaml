@@ -39,7 +39,7 @@ jobs:
         if: ${{ steps.checker.outputs.NODES_RUNNING != 0 }}
         run: | 
           for vm in $(sudo virsh list --all | awk {'print $2'} | grep k8s); do \
-          case $(echo -n $(sudo virsh domstate k8s-master)) in \
+          case $(echo -n $(sudo virsh domstate $vm)) in \
           "shut off") \
             sudo virsh start $vm \
             ;; \
