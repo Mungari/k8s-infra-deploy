@@ -44,6 +44,7 @@ jobs:
         if: ${{ steps.checker.outputs.NODES_RUNNING != 0 }}
         with:
           max_attempts: 3
+          timeout_minutes: 2
           command: echo BOOTSTRAPPED_NODES=$(ssh -o StrictHostKeyChecking=no -i terraform/configs/root root@$(sudo virsh domifaddr k8s-master | grep -ohe "192.*" | cut -d"/" -f1) "kubectl get nodes | grep worker | wc -l")>>$GITHUB_OUTPUT
 
       - name: "Get cluster IPs"
