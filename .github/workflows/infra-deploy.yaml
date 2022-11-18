@@ -27,7 +27,7 @@ jobs:
         run: DUPLICATE=$(sudo virsh net-dhcp-leases default | wc -l)>>$GITHUB_OUTPUT; echo $DUPLICATE
 
       - name: "Cleanup dnsmasq"
-        if: ${{ (steps.checker.outputs.NODES_RUNNING != 0) && (steps.duplicate.outputs.DUPLICATE > 5) }} 
+        if: (steps.checker.outputs.NODES_RUNNING != 0) && (steps.duplicate.outputs.DUPLICATE > 5)
         run: sudo rm /var/lib/libvirt/dnsmasq/virbr0.*
 
       - name: "Restart machines"
