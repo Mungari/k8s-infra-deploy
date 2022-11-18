@@ -37,7 +37,7 @@ jobs:
 
       - name: "Restart machines"
         if: ${{ steps.checker.outputs.NODES_RUNNING != 0 }}
-        run: for vm in $(sudo virsh list --all | awk {'print $2'} | grep k8s); do sudo virsh reboot $vm; done
+        run: for vm in $(sudo virsh list --all | awk {'print $2'} | grep k8s); do sudo virsh shutdown $vm; sudo virsh start $vm; done
 
       - uses: nick-fields/retry@v2
         id: health
