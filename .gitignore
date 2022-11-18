@@ -35,4 +35,3 @@ override.tf.json
 terraform.rc
 .terraform.*
 actions-runner
-terraform/configs/root*
