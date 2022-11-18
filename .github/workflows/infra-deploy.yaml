@@ -32,11 +32,11 @@ jobs:
         run: DUPLICATE=$(sudo virsh net-dhcp-leases default | wc -l)>>$GITHUB_OUTPUT
 
       - name: "Cleanup dnsmasq"
-        if: ${{ steps.checker.outputs.NODES_RUNNING != 0 }} 
+        if: ${{ steps.checker.outputs.NODES_RUNNING != 0 && steps.checker.outputs.DUPLICATE > 6 }} 
         run: sudo rm /var/lib/libvirt/dnsmasq/virbr0.*
 
       - name: "Restart machines"
-        if: ${{ steps.checker.outputs.NODES_RUNNING != 0 && steps.checker.outputs.DUPLICATE > 6 }}
+        if: ${{ steps.checker.outputs.NODES_RUNNING != 0 }}
         run: for vm in $(sudo virsh list --all | grep k8s); do sudo virsh reboot $vm; done
 
       - uses: nick-fields/retry@v2
