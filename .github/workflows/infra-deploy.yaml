@@ -43,7 +43,14 @@ jobs:
           esac \
           ; done 
 
+      - name: "Check cluster running"
+        run: | 
+          while $(sudo virsh list --all | awk {'print $3'} | grep running | wc -l) -lt 3; do \
+            echo "Waiting for all VMs to be up and running... $(sudo virsh list --all | awk {'print $3'} | grep running | wc -l)/3" \
+          done;
+          
       - uses: nick-fields/retry@v2
+        name: "Check if cluster is configured"
         id: health
         if: ${{ steps.checker.outputs.NODES_RUNNING != 0 }}
         with:
