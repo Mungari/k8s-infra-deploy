@@ -37,3 +37,6 @@ for instance in $(sudo virsh list --all | grep k8s | awk {'print $2'} | sort); d
             ;;
     esac
 done
+
+echo "waiting 2 seconds to warm up"
+sleep 2
