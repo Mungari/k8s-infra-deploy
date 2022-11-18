@@ -24,7 +24,7 @@ jobs:
       
       - name: "Check if ips are duplicate"
         id: duplicate
-        run: DUPLICATE=$(sudo virsh net-dhcp-leases default | wc -l)>>$GITHUB_OUTPUT
+        run: DUPLICATE=$(sudo virsh net-dhcp-leases default | wc -l)>>$GITHUB_OUTPUT; echo $DUPLICATE
 
       - name: "Cleanup dnsmasq"
         if: ${{ steps.checker.outputs.NODES_RUNNING != 0 && steps.duplicate.outputs.DUPLICATE > 5 }} 
