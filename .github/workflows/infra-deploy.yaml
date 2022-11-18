@@ -46,7 +46,8 @@ jobs:
       - name: "Check cluster running"
         run: | 
           while [[ $(sudo virsh list --all | awk {'print $3'} | grep running | wc -l) -lt 3 ]]; do \
-            echo "Waiting for all VMs to be up and running... $(sudo virsh list --all | awk {'print $3'} | grep running | wc -l)/3"; \
+            echo "Waiting for all VMs to be up and running... $(sudo virsh list --all | awk {'print $3'} | grep running | wc -l)/3";\
+            sleep 0.5 \;
           done
 
       - uses: nick-fields/retry@v2
